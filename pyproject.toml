@@ -1,17 +1,26 @@
 [project]
 name = "webhook-delivery-service"
 version = "0.1.0"
-description = "Add your description here"
+description = "Reliable asynchronous webhook delivery with retries and observability."
 readme = "README.md"
 authors = [
-    { name = "Hanishka-Kela", email = "hanishkaappl@gmail.com" }
+    { name = "Hanishka Kela", email = "hanishkaappl@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
-
-[project.scripts]
-webhook-delivery-service = "webhook_delivery_service:main"
+dependencies = [
+    "fastapi>=0.142.2",
+    "pydantic-settings>=2.15.0",
+    "uvicorn[standard]>=0.54.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.11.16,<0.12.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.16.10",
+]
