@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from webhook_delivery_service.infrastructure.repositories.user import UserRepository
 from webhook_delivery_service.domain.schemas.user import User as DomainUser
-from webhook_delivery_service.infrastructure.security.password import hash_password
-
+from webhook_delivery_service.infrastructure.security.password import hash_password, verify_password
+from webhook_delivery_service.infrastructure.security.jwt import create_access_token
 
 class AuthService:
     def __init__(self, user_repository: UserRepository, session: Session):
@@ -43,3 +43,17 @@ class AuthService:
         except Exception:
             self.session.rollback()
             raise
+
+    def login(self, email: str, password: str) -> str:
+        user = self.user_repository.get_by_email(email)
+
+        if user is None:
+            raise ValueError("Invalid credentials")
+
+        if not verify_password(password, user.hashed_password):
+            raise ValueError("Invalid credentials")
+
+        if not user.is_active:
+            raise ValueError("Account is inactive")
+
+        return create_access_token(user.id)
