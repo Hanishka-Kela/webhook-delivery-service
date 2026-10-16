@@ -20,6 +20,9 @@ class UserRepository:
             id=user.id,
             email=user.email,
             hashed_password=user.hashed_password,
+            is_active=user.is_active,
+            created_at=user.created_at,
+            updated_at=user.updated_at,
         )
 
     def _to_orm(self, user: DomainUser) -> ORMUser:
@@ -27,6 +30,7 @@ class UserRepository:
             id=user.id,
             email=user.email,
             hashed_password=user.hashed_password,
+            is_active=user.is_active,
         )
 
     def get_by_id(self, user_id: UUID) -> DomainUser | None:
@@ -49,8 +53,12 @@ class UserRepository:
 
     def create(self, user: DomainUser) -> DomainUser:
         orm_user = self._to_orm(user)
+
         self.session.add(orm_user)
-        return user
+        self.session.flush()
+        self.session.refresh(orm_user)
+
+        return self._to_domain(orm_user)
 
     def exists_by_email(self, email: str) -> bool:
         return self.session.scalar(
