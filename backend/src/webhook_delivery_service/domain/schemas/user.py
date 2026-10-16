@@ -1,8 +1,13 @@
-from dataclasses import dataclass
-from uuid import UUID
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from uuid import UUID, uuid4
+
 
 @dataclass
 class User:
-    id:UUID
-    email:str
-    password_hash:str
+    email: str
+    hashed_password: str
+    id: UUID = field(default_factory=uuid4)
+    is_active: bool = True
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
