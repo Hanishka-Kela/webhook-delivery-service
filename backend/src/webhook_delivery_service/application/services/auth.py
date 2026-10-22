@@ -1,6 +1,10 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from webhook_delivery_service.domain.exceptions import (
+    PasswordMismatchError,
+    UserAlreadyExistsError,
+)
 from webhook_delivery_service.domain.schemas.user import User as DomainUser
 from webhook_delivery_service.infrastructure.repositories.user import UserRepository
 from webhook_delivery_service.infrastructure.security.jwt import create_access_token
@@ -23,10 +27,10 @@ class AuthService:
     ) -> DomainUser:
 
         if password != confirm_password:
-            raise ValueError("Passwords don't match")
+            raise PasswordMismatchError("Passwords don't match")
 
         if self.user_repository.exists_by_email(email):
-            raise ValueError("User already exists")
+            raise UserAlreadyExistsError("User already exists")
 
         hashed_password = hash_password(password)
 
@@ -42,7 +46,7 @@ class AuthService:
 
         except IntegrityError as exc:
             self.session.rollback()
-            raise ValueError("User already exists") from exc
+            raise UserAlreadyExistsError("User already exists") from exc
 
         except Exception:
             self.session.rollback()
