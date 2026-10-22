@@ -19,7 +19,7 @@ jobs:
         image: postgres:18
         env:
           POSTGRES_USER: webhook
-          POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: webhook_test_password
           POSTGRES_DB: webhook_test_db
         ports:
           - 5432:5432
