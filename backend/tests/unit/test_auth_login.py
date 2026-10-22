@@ -49,7 +49,7 @@ def test_login_success(auth_setup):
 
 
 def test_login_nonexistent_user(auth_setup):
-    service, repository, session, user = auth_setup
+    service, repository, session, _ = auth_setup
 
     repository.get_by_email.return_value = None
 
@@ -63,7 +63,7 @@ def test_login_nonexistent_user(auth_setup):
 
 
 def test_login_wrong_password(auth_setup):
-    service, repository, session, user = auth_setup
+    service, _, session, _ = auth_setup
 
     with pytest.raises(ValueError, match="Invalid credentials"):
         service.login(
@@ -75,7 +75,7 @@ def test_login_wrong_password(auth_setup):
 
 
 def test_login_inactive_user(auth_setup):
-    service, repository, session, user = auth_setup
+    service, _, session, user = auth_setup
 
     user.is_active = False
 
@@ -89,7 +89,7 @@ def test_login_inactive_user(auth_setup):
 
 
 def test_login_does_not_modify_database(auth_setup):
-    service, repository, session, user = auth_setup
+    service, repository, session, _ = auth_setup
 
     with patch(
         "webhook_delivery_service.application.services.auth.create_access_token",

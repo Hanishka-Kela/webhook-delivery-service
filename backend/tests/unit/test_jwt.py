@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import jwt
@@ -44,7 +44,7 @@ def test_reject_expired_token(jwt_settings):
         {
             "sub": str(uuid4()),
             "type": "access",
-            "exp": datetime.now(timezone.utc) - timedelta(minutes=1),
+            "exp": datetime.now(UTC) - timedelta(minutes=1),
         },
         jwt_settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=jwt_settings.JWT_ALGORITHM,
@@ -59,7 +59,7 @@ def test_reject_invalid_signature(jwt_settings):
         {
             "sub": str(uuid4()),
             "type": "access",
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+            "exp": datetime.now(UTC) + timedelta(minutes=30),
         },
         "different-test-secret-key-at-least-32-bytes",
         algorithm=jwt_settings.JWT_ALGORITHM,
@@ -74,7 +74,7 @@ def test_reject_wrong_token_type(jwt_settings):
         {
             "sub": str(uuid4()),
             "type": "refresh",
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+            "exp": datetime.now(UTC) + timedelta(minutes=30),
         },
         jwt_settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=jwt_settings.JWT_ALGORITHM,
@@ -88,7 +88,7 @@ def test_reject_missing_subject(jwt_settings):
     token = jwt.encode(
         {
             "type": "access",
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+            "exp": datetime.now(UTC) + timedelta(minutes=30),
         },
         jwt_settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=jwt_settings.JWT_ALGORITHM,
@@ -103,7 +103,7 @@ def test_reject_invalid_subject(jwt_settings):
         {
             "sub": "not-a-uuid",
             "type": "access",
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=30),
+            "exp": datetime.now(UTC) + timedelta(minutes=30),
         },
         jwt_settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=jwt_settings.JWT_ALGORITHM,

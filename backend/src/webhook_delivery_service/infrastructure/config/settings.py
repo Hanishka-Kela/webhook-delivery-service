@@ -1,4 +1,3 @@
-
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -6,12 +5,10 @@ from typing import Literal
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 
 
 class Settings(BaseSettings):
-
     # Application
     APP_NAME: str = "Webhook Delivery Service"
     DEBUG: bool = False
@@ -40,9 +37,7 @@ class Settings(BaseSettings):
     MAX_RETRY_ATTEMPTS: int = Field(default=5, ge=0)
 
     # Frontend and observability
-    CORS_ORIGINS: list[str] = Field(
-        default_factory=lambda: ["http://localhost:5173"]
-    )
+    CORS_ORIGINS: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
     LOG_LEVEL: Literal[
         "DEBUG",
         "INFO",

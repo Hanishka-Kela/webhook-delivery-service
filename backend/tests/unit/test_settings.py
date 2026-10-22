@@ -1,6 +1,4 @@
-
 import pytest
-
 from pydantic import ValidationError
 
 from webhook_delivery_service.infrastructure.config.settings import (

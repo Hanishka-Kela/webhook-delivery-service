@@ -54,9 +54,7 @@ def test_signup_persists_user(auth_service, db_session):
         confirm_password="SecurePassword123",
     )
 
-    saved_user = db_session.scalar(
-        select(ORMUser).where(ORMUser.email == email)
-    )
+    saved_user = db_session.scalar(select(ORMUser).where(ORMUser.email == email))
 
     assert saved_user is not None
     assert saved_user.id == user.id

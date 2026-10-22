@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import jwt
@@ -10,9 +10,7 @@ from webhook_delivery_service.infrastructure.config.settings import get_settings
 def create_access_token(user_id: UUID) -> str:
     settings = get_settings()
 
-    expire = datetime.now(timezone.utc) + timedelta(
-        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
-    )
+    expire = datetime.now(UTC) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
     payload = {
         "sub": str(user_id),
@@ -44,7 +42,7 @@ def verify_access_token(token: str) -> UUID:
         subject = payload["sub"]
 
         if not isinstance(subject, str):
-            raise ValueError("Invalid token subject")
+            raise TypeError("Invalid token subject")
 
         return UUID(subject)
 

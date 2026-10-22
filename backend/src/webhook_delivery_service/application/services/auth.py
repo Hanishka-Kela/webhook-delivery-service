@@ -1,10 +1,14 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from webhook_delivery_service.infrastructure.repositories.user import UserRepository
 from webhook_delivery_service.domain.schemas.user import User as DomainUser
-from webhook_delivery_service.infrastructure.security.password import hash_password, verify_password
+from webhook_delivery_service.infrastructure.repositories.user import UserRepository
 from webhook_delivery_service.infrastructure.security.jwt import create_access_token
+from webhook_delivery_service.infrastructure.security.password import (
+    hash_password,
+    verify_password,
+)
+
 
 class AuthService:
     def __init__(self, user_repository: UserRepository, session: Session):

@@ -1,6 +1,4 @@
-
 import pytest
-
 from fastapi import status
 from fastapi.testclient import TestClient
 
@@ -25,10 +23,7 @@ def test_allowed_origin(client):
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert (
-        response.headers["access-control-allow-origin"]
-        == "http://localhost:5173"
-    )
+    assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
 
 
 def test_disallowed_origin(client):
@@ -110,10 +105,7 @@ def test_actual_request_from_allowed_origin(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"status": "ok"}
-    assert (
-        response.headers["access-control-allow-origin"]
-        == "http://localhost:5173"
-    )
+    assert response.headers["access-control-allow-origin"] == "http://localhost:5173"
 
 
 def test_actual_request_from_disallowed_origin(client):

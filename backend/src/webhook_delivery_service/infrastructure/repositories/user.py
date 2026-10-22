@@ -3,11 +3,11 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from webhook_delivery_service.infrastructure.persistence.models.user import (
-    User as ORMUser,
-)
 from webhook_delivery_service.domain.schemas.user import (
     User as DomainUser,
+)
+from webhook_delivery_service.infrastructure.persistence.models.user import (
+    User as ORMUser,
 )
 
 
@@ -42,9 +42,7 @@ class UserRepository:
         return self._to_domain(user)
 
     def get_by_email(self, email: str) -> DomainUser | None:
-        user = self.session.scalar(
-            select(ORMUser).where(ORMUser.email == email)
-        )
+        user = self.session.scalar(select(ORMUser).where(ORMUser.email == email))
 
         if user is None:
             return None
@@ -61,6 +59,7 @@ class UserRepository:
         return self._to_domain(orm_user)
 
     def exists_by_email(self, email: str) -> bool:
-        return self.session.scalar(
-            select(ORMUser.id).where(ORMUser.email == email)
-        ) is not None
+        return (
+            self.session.scalar(select(ORMUser.id).where(ORMUser.email == email))
+            is not None
+        )

@@ -93,7 +93,7 @@ def test_signup_integrity_error(auth_setup):
 
 
 def test_signup_commit_failure(auth_setup):
-    service, repository, session = auth_setup
+    service, _, session = auth_setup
 
     session.commit.side_effect = RuntimeError("Database unavailable")
 
